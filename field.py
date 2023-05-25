@@ -1,4 +1,3 @@
-import enum
 import hex
 import team as t
 
@@ -48,11 +47,11 @@ class Field():
         visiting = [start]
         while len(visiting) > 0:
             current = visiting[-1]
-            del visiting[-1]
+            visiting.pop()
             neighboring = self._team_neighboring_hexes(current.x, current.y)
             for h in neighboring:
                 if h not in visited:
-                    visiting += [h]
+                    visiting.append(h)
             visited += neighboring
         if team == t.Team.player:
             finish = hex.Hex(len(self._hexes)-1, len(self._hexes)-2)
