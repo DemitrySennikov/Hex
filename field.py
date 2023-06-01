@@ -1,15 +1,12 @@
 from team import Team as T
+from math import sin, pi
+from hex import Hex
 
 
 class Field():
-    def __init__(self, n, op):
+    def __init__(self, n, op, screen):
         self.size = n
-        self._hexes = [[0 for _ in range(n+2)] for _ in range(n+2)]
-        for i in range(1, n+1):
-            self._hexes[0][i] = T.player.value
-            self._hexes[n+1][i] = T.player.value
-            self._hexes[i][0] = op.value
-            self._hexes[i][n+1] = op.value
+        self.hexes = self._init_hexes(n, op, screen)
     
 
     def _in_bounds(self, x, y):
@@ -18,8 +15,8 @@ class Field():
 
     def try_move(self, team, x, y):
         if self._in_bounds(x, y):
-            if self._hexes[x][y] == 0:
-                self._hexes[x][y] = team.value
+            if self.hexes[x][y].owner == 0:
+                self.hexes[x][y].owner = team.value
                 return True
         return False
     
@@ -33,7 +30,7 @@ class Field():
         for i in range(-1, 2):
             for j in range(-1, 2):
                 if i+j != 0 and self._in_bounds_global(x+i, y+j):
-                    if self._hexes[x+i][y+j] == self._hexes[x][y]:
+                    if self.hexes[x+i][y+j].owner == self.hexes[x][y].owner:
                         result.append((x+i, y+j))
         return result
 
@@ -55,6 +52,25 @@ class Field():
                     visiting.append(h)
             visited += neighboring
         return finish in visited
+            
+
+    def _init_hexes(self, n, op, screen):
+        hexes = []
+        side = min(25, 200/n)
+        Y = 320-((n+2)//2)*side*sin(pi/3)
+        X = 480-((n+2)//2)*side*3/2
+        for x in range(n+2):
+            hexes.append([])
+            for y in range(n+2):
+                center_x = X + x*side*3/2
+                center_y = Y + y*2*side*sin(pi/3)-x*side*sin(pi/3)
+                hex = Hex(x, y, center_x, center_y, screen, side)
+                if x == 0 or x == n+1:
+                    hex.assign(T.player, screen)
+                elif y == 0 or y == n+1:
+                    hex.assign(op, screen)
+                hexes[x].append(hex)
+        return hexes
     
 
 '''
