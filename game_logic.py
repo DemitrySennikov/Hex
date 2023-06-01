@@ -28,9 +28,13 @@ def game(n, op):
             if field.is_team_win(current_team):
                 game_over = True
                 if current_team.value == T.player.value:
-                    screen.fill(BLUE)
+                    pg.draw.polygon(screen, BLUE, 
+                                    [(0, 0), (0, 640),
+                                     (960, 640), (960, 0)], 100)
                 else:
-                    screen.fill(RED)
+                    pg.draw.polygon(screen, RED, 
+                                    [(0, 0), (0, 640),
+                                     (960, 640), (960, 0)], 100)
                 pg.display.update()
             else:
                 if current_team.value == T.player.value:
