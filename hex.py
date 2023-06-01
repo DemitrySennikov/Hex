@@ -1,5 +1,5 @@
 import pygame as pg
-import team as t
+from team import Team as T
 from math import sin, cos, pi
 
 
@@ -26,7 +26,7 @@ class Hex():
     
     def assign(self, team, screen):
         self.owner = team.value
-        if team.value == t.Team.player.value:
+        if team.value == T.player.value:
             color = BLUE
         else:
             color = RED

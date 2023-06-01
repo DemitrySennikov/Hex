@@ -1,15 +1,15 @@
-import team as t
+from team import Team as T
 
 
 class Field():
-    def __init__(self, n):
+    def __init__(self, n, op):
         self.size = n
         self._hexes = [[0 for _ in range(n+2)] for _ in range(n+2)]
         for i in range(1, n+1):
-            self._hexes[0][i] = t.Team.player.value
-            self._hexes[n+1][i] = t.Team.player.value
-            self._hexes[i][0] = t.Team.AI.value
-            self._hexes[i][n+1] = t.Team.AI.value
+            self._hexes[0][i] = T.player.value
+            self._hexes[n+1][i] = T.player.value
+            self._hexes[i][0] = op.value
+            self._hexes[i][n+1] = op.value
     
 
     def _in_bounds(self, x, y):
@@ -39,7 +39,7 @@ class Field():
 
 
     def is_team_win(self, team):
-        if team == t.Team.player:
+        if team == T.player:
             start = (0, 1)
             finish = (self.size+1, self.size)
         else:
