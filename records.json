@@ -1,0 +1,23 @@
+{
+    "Player1": {
+        "Games": {
+            "Played": 2,
+            "Won": 1
+        },
+        "Max Win Points": 8
+    },
+    "Random": {
+        "Games": {
+            "Played": 1,
+            "Won": 0
+        },
+        "Max Win Points": 0
+    },
+    "Player2": {
+        "Games": {
+            "Played": 1,
+            "Won": 1
+        },
+        "Max Win Points": 5
+    }
+}

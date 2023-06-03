@@ -4,10 +4,13 @@ from team import Team as T
 
 def main():
     n = 5
+    player_name = "Player1"
+    op_name = "Random"
     op = T.random
-    game(n, op)
+    game(n, player_name, op, op_name)
     op = T.other_player
-    game(n, op)
+    op_name = "Player2"
+    game(n, player_name, op, op_name)
     
     
 if __name__ == '__main__':

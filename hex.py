@@ -20,9 +20,7 @@ class Hex():
                         [(center_x+s*cos(pi*i/3), center_y+s*sin(pi*i/3)) for i in range(6)],
                         int(s)//5)
         pg.display.update()
-
-    def __eq__(self, o):
-        return self.x == o.x and self.y == o.y
+    
     
     def assign(self, team, screen):
         self.owner = team.value
