@@ -56,7 +56,7 @@ class Field():
 
     def _init_hexes(self, n, op, screen):
         hexes = []
-        side = min(25, 200/n)
+        side = min(25, 160/n)
         Y = 320-((n+2)//2)*side*sin(pi/3)
         X = 480-((n+2)//2)*side*3/2
         for x in range(n+2):

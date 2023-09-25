@@ -1,17 +1,24 @@
-from game_logic import game
-from team import Team as T
+import pygame as pg
+from menu import menu
+
+
+WIDTH = 960
+HEIGHT = 640
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+BLUE = (0,0,255)
+GREEN = (0,255,0)
+RED = (255,0,0)
 
 
 def main():
-    n = 5
-    player_name = "Player1"
-    op_name = "Random"
-    op = T.random
-    game(n, player_name, op, op_name)
-    op = T.other_player
-    op_name = "Player2"
-    game(n, player_name, op, op_name)
-    
-    
+    pg.init()
+    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    pg.display.set_caption("Hex")
+    pg.display.update()
+    menu(screen)
+    pg.quit()
+
+
 if __name__ == '__main__':
     main()
