@@ -3,37 +3,44 @@ import pygame as pg
 from team import Team as T
 
 
-def move(team, hexes):
+def move(team, hexes, home):
     if team.value == T.player.value:
-        return _player_move(hexes)
+        return _player_move(hexes, home)
     else:
-        return _opponent_move(team, hexes)
+        return _opponent_move(team, hexes, home)
 
 
-def _opponent_move(team, hexes):
+def _opponent_move(team, hexes, home):
     game_over = False
+    is_menu = False
     is_quit = False
     if team.value == T.random.value:
         hex = _random_move(hexes)
     elif team.value == T.other_player.value:
-        hex, game_over, is_quit = _player_move(hexes)
+        hex, game_over, is_menu, is_quit = _player_move(hexes, home)
     else:
         hex = _random_move(hexes)
-    return hex, game_over, is_quit
+    return hex, game_over, is_menu, is_quit
     
     
-def _player_move(hexes):
+def _player_move(hexes, home):
     game_over = False
     is_quit = False
+    is_menu = False
     hex = None
     for event in pg.event.get():
         if event.type == pg.QUIT:
             game_over = True
+            is_menu = True
             is_quit = True
         if event.type == pg.MOUSEBUTTONDOWN:
             s_x, s_y = event.pos
             hex = _define_nearest_hex(s_x, s_y, hexes)
-    return hex, game_over, is_quit
+            if home.is_pressed((s_x, s_y)):
+                hex = None
+                game_over = True
+                is_menu = True
+    return hex, game_over, is_menu, is_quit
 
 
 def _define_nearest_hex(s_x, s_y, hexes):

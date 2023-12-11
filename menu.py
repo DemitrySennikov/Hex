@@ -27,12 +27,15 @@ def menu(screen):
                   150, 150, (3*WIDTH//4, 2*HEIGHT//3), screen)
     pg.display.update()
     is_quit = False
-    while not is_quit:
+    is_menu = False
+    while not is_menu:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 is_quit = True
+                is_menu = True
             if event.type == pg.MOUSEBUTTONDOWN:
                 p = event.pos
                 if play.is_pressed(p):
-                    game_settings(screen)
-                    is_quit = True
+                    is_quit = game_settings(screen)
+                    is_menu = True
+    return is_quit

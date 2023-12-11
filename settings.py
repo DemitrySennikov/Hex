@@ -43,12 +43,16 @@ def game_settings(screen):
                   (WIDTH//4, HEIGHT//3), screen)
     first = Button("Blue", 32, BLUE, RED, WHITE, 100, 50,
                    (3*WIDTH//4, HEIGHT//3), screen)
+    home = Button("Home", 20, WHITE, WHITE, BLACK, 80, 50,
+                  (WIDTH-100, 100), screen)
     pg.display.update()
     is_quit = False
-    while not is_quit:
+    is_menu = False
+    while not is_menu:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 is_quit = True
+                is_menu = True
             if event.type == pg.MOUSEBUTTONDOWN:
                 p = event.pos
                 if player_name.is_pressed(p) != player_name.active:
@@ -64,17 +68,20 @@ def game_settings(screen):
                         first.text = "Blue"
                     first.change()
                 if RANDOM.is_pressed(p):
-                    game(int(size.text), player_name.text, T.random,
-                         "Random", first.text, screen)
-                    is_quit = True
+                    is_quit = game(int(size.text), player_name.text, T.random,
+                                   "Random", first.text, screen)
+                    is_menu = True
                 if PVP.is_pressed(p):
-                    game(int(size.text), player_name.text, T.other_player,
-                         op_player_name.text, first.text, screen)
-                    is_quit = True
+                    is_quit = game(int(size.text), player_name.text, 
+                                   T.other_player, op_player_name.text, 
+                                   first.text, screen)
+                    is_menu = True
                 if AI.is_pressed(p):
-                    game(int(size.text), player_name.text, T.AI,
+                    is_quit = game(int(size.text), player_name.text, T.AI,
                          "AI", first.text, screen)
-                    is_quit = True
+                    is_menu = True
+                if home.is_pressed(p):
+                    is_menu = True
             if event.type == pg.KEYDOWN:
                 s = event.unicode
                 if player_name.active:
@@ -102,3 +109,4 @@ def game_settings(screen):
                         if int(size.text) > 30:
                             size.text = "30"
                     size.draw()
+    return is_quit

@@ -16,7 +16,9 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption("Hex")
     pg.display.update()
-    menu(screen)
+    is_quit = False
+    while not is_quit:
+        is_quit = menu(screen)
     pg.quit()
 
 
