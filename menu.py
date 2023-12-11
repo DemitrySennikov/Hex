@@ -20,9 +20,11 @@ def menu(screen):
     title_rect.center = (WIDTH//2, HEIGHT//3)
     screen.blit(title, title_rect)
     records = Button("Records", 50, WHITE, WHITE, BLUE,
-                     150, 150, (WIDTH//3, 2*HEIGHT//3), screen)
+                     150, 150, (WIDTH//4, 2*HEIGHT//3), screen)
+    continue_play = Button("Continue", 40, WHITE, WHITE, GREEN,
+                  150, 150, (WIDTH//2, 2*HEIGHT//3), screen)
     play = Button("Play", 70, WHITE, WHITE, RED,
-                  150, 150, (2*WIDTH//3, 2*HEIGHT//3), screen)
+                  150, 150, (3*WIDTH//4, 2*HEIGHT//3), screen)
     pg.display.update()
     is_quit = False
     while not is_quit:

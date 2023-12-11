@@ -1,7 +1,7 @@
 import pygame as pg
 from button import Button
 from pygame.font import SysFont, Font
-from game_logic import game
+from game import game
 from team import Team as T
 
 

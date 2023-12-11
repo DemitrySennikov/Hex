@@ -40,9 +40,6 @@ class Button():
                 self.text = (self.text + event.unicode)[:15]
             self.draw()
 
-    def remove(self):
-        pg.draw.rect(self.screen, (255, 255, 255), self.rect)
-
     def change(self):
         self.active = not self.active
         self.draw()

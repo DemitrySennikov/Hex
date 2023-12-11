@@ -9,6 +9,7 @@ def move(team, hexes):
     else:
         return _opponent_move(team, hexes)
 
+
 def _opponent_move(team, hexes):
     game_over = False
     is_quit = False
@@ -57,7 +58,7 @@ def _random_move(hexes):
     for x in range(len(hexes)):
         for y in range(len(hexes[0])):
             hex = hexes[x][y]
-            if hex.owner == 0:
+            if hex.owner is None:
                 free_hexes.append(hex)
     return random.choice(free_hexes)
 

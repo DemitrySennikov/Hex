@@ -1,37 +1,16 @@
 {
     "Player1": {
         "Games": {
-            "Played": 19,
-            "Won": 16
-        },
-        "Max Win Points": 32
-    },
-    "Random": {
-        "Games": {
-            "Played": 13,
-            "Won": 0
-        },
-        "Max Win Points": 0
-    },
-    "Player2": {
-        "Games": {
-            "Played": 7,
-            "Won": 3
-        },
-        "Max Win Points": 28
-    },
-    "Dmitry": {
-        "Games": {
-            "Played": 2,
-            "Won": 1
-        },
-        "Max Win Points": 12
-    },
-    "Alex": {
-        "Games": {
             "Played": 1,
             "Won": 1
         },
-        "Max Win Points": 13
+        "WPPL": 1.5454545454545454
+    },
+    "Random": {
+        "Games": {
+            "Played": 1,
+            "Won": 0
+        },
+        "WPPL": 0
     }
 }

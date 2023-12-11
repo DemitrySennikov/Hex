@@ -1,10 +1,9 @@
 import pygame as pg
-import json
-import field as f
+from field import Field
 from team import Team as T
 from moves import move
 from pygame.font import Font
-from button import Button
+from records import update_records
 
 
 WIDTH = 960
@@ -18,7 +17,8 @@ def_font = pg.font.get_default_font()
 
 def game(n, player_name, op, op_name, first_color, screen):
     screen.fill(WHITE)
-    field = f.Field(n, op, screen)
+    field = Field(n, op)
+    field.draw(screen)
     game_over = False
     is_quit = False
     player_text = Font(def_font, 32).render(player_name, True, BLUE)
@@ -49,7 +49,8 @@ def game(n, player_name, op, op_name, first_color, screen):
             continue
         if field.try_move(current_team, hex.x, hex.y):
             moves += 1
-            hex.assign(current_team, screen)
+            hex.assign(current_team)
+            hex.draw(screen)
             if field.is_team_win(current_team):
                 game_over = True
                 if current_team.value == T.player.value:
@@ -64,7 +65,7 @@ def game(n, player_name, op, op_name, first_color, screen):
                                      (WIDTH, HEIGHT), (WIDTH, 0)], 100)
                     winner = op_name
                     loser = player_name
-                write_records(winner, loser, moves)
+                update_records(winner, loser, moves, n)
             else:
                 if current_team.value == T.player.value:
                     current_team = op
@@ -84,29 +85,3 @@ def game(n, player_name, op, op_name, first_color, screen):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_RETURN:
                     is_quit = True
-
-
-def write_records(winner, loser, moves):
-    with open('records.json', 'r') as r:
-        D = json.load(r)
-    if winner not in D:
-        D[winner] = {}
-        D[winner]['Games'] = {}
-        D[winner]['Games']['Played'] = 1
-        D[winner]['Games']['Won'] = 1
-        D[winner]['Max Win Points'] = (moves+1)//2
-    else:
-        D[winner]['Games']['Played'] += 1
-        D[winner]['Games']['Won'] += 1
-        D[winner]['Max Win Points'] = max((moves+1)//2, 
-                                          D[winner]['Max Win Points'])
-    if loser not in D:
-        D[loser] = {}
-        D[loser]['Games'] = {}
-        D[loser]['Games']['Played'] = 1
-        D[loser]['Games']['Won'] = 0
-        D[loser]['Max Win Points'] = 0
-    else:
-        D[loser]['Games']['Played'] += 1
-    with open('records.json', 'w') as r:
-        json.dump(D, r, indent=4)
