@@ -1,6 +1,7 @@
 import pygame as pg
 from pygame.font import SysFont
 from settings import game_settings
+from game import continue_game
 from button import Button
 
 WIDTH = 960
@@ -38,4 +39,6 @@ def menu(screen):
                 if play.is_pressed(p):
                     is_quit = game_settings(screen)
                     is_menu = True
+                if continue_play.is_pressed(p):
+                    is_quit = continue_game(screen)
     return is_quit

@@ -1,7 +1,7 @@
 import pygame as pg
 from button import Button
 from pygame.font import SysFont, Font
-from game import game
+from game import start_game
 from team import Team as T
 
 
@@ -16,19 +16,7 @@ def_font = pg.font.get_default_font()
 
 
 def game_settings(screen):
-    screen.fill(WHITE)
-    title = SysFont(def_font, 72, False, True).render("VS", True, BLACK)
-    title_rect = title.get_rect()
-    title_rect.center = (WIDTH//2, HEIGHT//2)
-    screen.blit(title, title_rect)
-    size_text = Font(def_font, 20).render("Size", True, BLACK)
-    size_rect = size_text.get_rect()
-    size_rect.center = (WIDTH//4, HEIGHT//3 - 50)
-    screen.blit(size_text, size_rect)
-    first_text = Font(def_font, 20).render("First move", True, BLACK)
-    first_rect = first_text.get_rect()
-    first_rect.center = (3*WIDTH//4, HEIGHT//3 - 50)
-    screen.blit(first_text, first_rect)
+    _settings_drawing(screen)
     player_name = Button("Player1", 32, BLACK, WHITE, BLUE, 150, 50,
                          (WIDTH//2, HEIGHT//3), screen)
     op_player_name = Button("Player2", 32, BLACK, WHITE, RED, 150, 50,
@@ -46,13 +34,16 @@ def game_settings(screen):
     home = Button("Home", 20, WHITE, WHITE, BLACK, 80, 50,
                   (WIDTH-100, 100), screen)
     pg.display.update()
+
     is_quit = False
     is_menu = False
+
     while not is_menu:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 is_quit = True
                 is_menu = True
+            
             if event.type == pg.MOUSEBUTTONDOWN:
                 p = event.pos
                 if player_name.is_pressed(p) != player_name.active:
@@ -68,20 +59,22 @@ def game_settings(screen):
                         first.text = "Blue"
                     first.change()
                 if RANDOM.is_pressed(p):
-                    is_quit = game(int(size.text), player_name.text, T.random,
-                                   "Random", first.text, screen)
+                    is_quit = start_game(int(size.text), player_name.text,
+                                         T.random, "Random", first.text, 
+                                         screen)
                     is_menu = True
                 if PVP.is_pressed(p):
-                    is_quit = game(int(size.text), player_name.text, 
-                                   T.other_player, op_player_name.text, 
-                                   first.text, screen)
+                    is_quit = start_game(int(size.text), player_name.text, 
+                                         T.other_player, op_player_name.text,
+                                         first.text, screen)
                     is_menu = True
                 if AI.is_pressed(p):
-                    is_quit = game(int(size.text), player_name.text, T.AI,
-                         "AI", first.text, screen)
+                    is_quit = start_game(int(size.text), player_name.text, 
+                                         T.AI, "AI", first.text, screen)
                     is_menu = True
                 if home.is_pressed(p):
                     is_menu = True
+            
             if event.type == pg.KEYDOWN:
                 s = event.unicode
                 if player_name.active:
@@ -109,4 +102,22 @@ def game_settings(screen):
                         if int(size.text) > 30:
                             size.text = "30"
                     size.draw()
+            
     return is_quit
+
+
+def _settings_drawing(screen):
+    screen.fill(WHITE)
+    title = SysFont(def_font, 72, False, True).render("VS", True, BLACK)
+    title_rect = title.get_rect()
+    title_rect.center = (WIDTH//2, HEIGHT//2)
+    screen.blit(title, title_rect)
+    size_text = Font(def_font, 20).render("Size", True, BLACK)
+    size_rect = size_text.get_rect()
+    size_rect.center = (WIDTH//4, HEIGHT//3 - 50)
+    screen.blit(size_text, size_rect)
+    first_text = Font(def_font, 20).render("First move", True, BLACK)
+    first_rect = first_text.get_rect()
+    first_rect.center = (3*WIDTH//4, HEIGHT//3 - 50)
+    screen.blit(first_text, first_rect)
+    pg.display.update()

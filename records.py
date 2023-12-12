@@ -32,7 +32,6 @@ def _records_format(ranking):
     pass
 
 
-
 def return_top_5_games_played():
     with open('records.json', 'r') as r:
         D = json.load(r)

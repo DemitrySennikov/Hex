@@ -8,6 +8,20 @@
     },
     "Random": {
         "Games": {
+            "Played": 2,
+            "Won": 0
+        },
+        "WPPL": 0
+    },
+    "Dima": {
+        "Games": {
+            "Played": 2,
+            "Won": 2
+        },
+        "WPPL": 1.8857142857142857
+    },
+    "Alex": {
+        "Games": {
             "Played": 1,
             "Won": 0
         },

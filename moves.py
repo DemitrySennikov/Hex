@@ -35,11 +35,12 @@ def _player_move(hexes, home):
             is_quit = True
         if event.type == pg.MOUSEBUTTONDOWN:
             s_x, s_y = event.pos
-            hex = _define_nearest_hex(s_x, s_y, hexes)
             if home.is_pressed((s_x, s_y)):
                 hex = None
                 game_over = True
                 is_menu = True
+            else:
+                hex = _define_nearest_hex(s_x, s_y, hexes)
     return hex, game_over, is_menu, is_quit
 
 
