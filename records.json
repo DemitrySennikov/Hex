@@ -15,14 +15,21 @@
     },
     "Dima": {
         "Games": {
-            "Played": 2,
-            "Won": 2
+            "Played": 4,
+            "Won": 4
         },
-        "WPPL": 1.8857142857142857
+        "WPPL": 4.349350649350649
     },
     "Alex": {
         "Games": {
             "Played": 1,
+            "Won": 0
+        },
+        "WPPL": 0
+    },
+    "Lena": {
+        "Games": {
+            "Played": 2,
             "Won": 0
         },
         "WPPL": 0

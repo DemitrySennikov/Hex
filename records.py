@@ -14,7 +14,7 @@ RED = (255,0,0)
 def_font = pg.font.get_default_font()
 
 
-def records(screen):
+def show_records(screen):
     screen.fill(WHITE)
     games = Button("Games", 32, WHITE, BLACK, RED, 100, 50,
                    (WIDTH//4, HEIGHT//3), screen)
@@ -25,14 +25,56 @@ def records(screen):
     home = Button("Home", 20, WHITE, WHITE, BLACK, 80, 50,
                   (WIDTH-100, 100), screen)
     games.change()
-    ranking = return_top_5_games_played()
+    active_button = games
+    ranking = _return_top_5_games_played()
+    _write_records(ranking, screen)
+    is_menu = False
+    is_quit = False
+    while not is_menu:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                is_quit = True
+                is_menu = True
+            
+            if event.type == pg.MOUSEBUTTONDOWN:
+                p = event.pos
+                if games.is_pressed(p):
+                    active_button.change()
+                    active_button = games
+                    active_button.change()
+                    ranking = _return_top_5_games_played()
+                    _write_records(ranking, screen)
+                if wins.is_pressed(p):
+                    active_button.change()
+                    active_button = wins
+                    active_button.change()
+                    ranking = _return_top_5_games_won()
+                    _write_records(ranking, screen)
+                if awppl.is_pressed(p):
+                    active_button.change()
+                    active_button = awppl
+                    active_button.change()
+                    ranking = _return_top_5_AWPPL()
+                    _write_records(ranking, screen)
+                if home.is_pressed(p):
+                    is_menu = True
+    return is_quit
+
+def _write_records(ranking, screen):
+    clean_rect = pg.Rect(0, HEIGHT//3+50, WIDTH, HEIGHT-(HEIGHT//3+50))
+    pg.draw.rect(screen, WHITE, clean_rect)
+    h = HEIGHT//2
+    for record, name in ranking:
+        size_text = Font(def_font, 32).render(name + ' ' + str(record),
+                                               True, BLACK)
+        size_rect = size_text.get_rect()
+        size_rect.center = (WIDTH//2, h)
+        screen.blit(size_text, size_rect)
+        h += 40
+    pg.display.update()
 
 
-def _records_format(ranking):
-    pass
-
-
-def return_top_5_games_played():
+def _return_top_5_games_played():
     with open('records.json', 'r') as r:
         D = json.load(r)
     games = []
@@ -42,25 +84,25 @@ def return_top_5_games_played():
     return games[:5]
 
 
-def return_top_5_games_won():
+def _return_top_5_games_won():
     with open('records.json', 'r') as r:
         D = json.load(r)
     wins = []
     for name in D:
         wins.append([D[name]["Games"]["Won"], name])
-        wins.sort(reverse=True)
-        return wins[:5]
+    wins.sort(reverse=True)
+    return wins[:5]
 
 
-def return_top_5_AWPPL():
+def _return_top_5_AWPPL():
     with open('records.json', 'r') as r:
         D = json.load(r)
     win_points = []
     for name in D:
         if D[name]["Games"]["Won"] > 0:
             win_points.append([round(D[name]["WPPL"]/D[name]["Games"]["Won"], 3), name])
-        win_points.sort()
-        return win_points[:5]
+    win_points.sort()
+    return win_points[:5]
 
 
 def update_records(winner, loser, moves, size):
