@@ -73,14 +73,4 @@ def _random_move(hexes):
 
 
 def _AI_move(field: Field):
-    hexes, is_attack, d = field.AI_solver()
-    if is_attack and d <=4 or not is_attack and d <= 5:
-        return random.choice(hexes)
-    count = 0
-    for hex_row in field.hexes:
-        for hex in hex_row:
-            if hex.owner == T.AI:
-                count += 1
-    if count%2 == 0:
-        return random.choice(hexes)
-    return _random_move(field.hexes)
+    return random.choice(field.AI_solver())
