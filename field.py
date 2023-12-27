@@ -8,14 +8,12 @@ class Field():
         self.size = n
         self.hexes = self._init_hexes(n, op)
 
-
     def try_move(self, team, x, y):
         if self._in_bounds(x, y):
             if self.hexes[x][y].owner is None:
                 self.hexes[x][y].owner = team
                 return True
         return False
-
 
     def is_team_win(self, team):
         if team == T.player:
@@ -34,7 +32,95 @@ class Field():
                     visiting.append(h)
             visited += neighboring
         return finish in visited
-            
+    
+    def AI_solver(self):
+        left_red = self._find_bound_hexes(1, 0)
+        right_red = self._find_bound_hexes(1, self.size+1)
+        left_blue = self._find_bound_hexes(0, 1)
+        right_blue = self._find_bound_hexes(self.size+1, 1)
+        min_d = 10000000
+        is_attack = True
+        hexes = []
+        for hex_row in self.hexes:
+            for hex in hex_row:
+                if hex.owner is not None:
+                    continue
+                d_red = (self.distance_to_zone(hex, left_red) +
+                         self.distance_to_zone(hex, right_red)-1)
+                d_blue = (self.distance_to_zone(hex, left_blue) +
+                          self.distance_to_zone(hex, right_blue)-1)
+                if min(d_red, d_blue) < min_d:
+                    hexes = [hex]
+                    is_attack = (d_red <= d_blue)
+                    min_d = min(d_blue, d_red)
+                elif min(d_red, d_blue) == min_d:
+                    if min_d == d_red:
+                        if not is_attack:
+                            hexes = []
+                            is_attack = True
+                        hexes.append(hex)
+                    elif not is_attack:
+                        hexes.append(hex)
+        return hexes, is_attack, min_d
+                
+    def distance_to_zone(self, hex, zone):
+        d = 0
+        area = {(hex.x, hex.y)}
+        while len(set.intersection(area, zone)) == 0:
+            area = set.union(area, 
+                            *(self._neighboring_hexes(x, y)
+                            for x, y in area))
+            d += 1
+        return d
+
+    def _find_bound_hexes(self, x, y):
+        result = set([(x, y)])
+        order = set([(x, y)])
+        while len(order) > 0:
+            p = order.pop()
+            neighboring = self._team_neighboring_hexes(p[0], p[1])
+            for q in neighboring:
+                if q not in result:
+                    order.add(q)
+                    result.add(q)
+        return result
+    
+    def _in_bounds(self, x, y):
+        return 0 < x <= self.size and 0 < y <= self.size
+
+    def _in_bounds_global(self, x, y):
+        return 0 <= x < self.size+2 and 0 <= y < self.size+2
+
+    def _team_neighboring_hexes(self, x, y, team = None):
+        result = []
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if i+j != 0 and self._in_bounds_global(x+i, y+j):
+                    if team is None:
+                        if (self.hexes[x+i][y+j].owner == 
+                            self.hexes[x][y].owner):
+                            result.append((x+i, y+j))
+                    else:
+                        if self.hexes[x+i][y+j].owner == team:
+                            result.append((x+i, y+j))
+        return result
+
+    def _neutral_neighboring_hexes(self, x, y):
+        result = []
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if i+j != 0 and self._in_bounds_global(x+i, y+j):
+                    if self.hexes[x+i][y+j].owner is None:
+                        result.append((x+i, y+j))
+        return result
+    
+    def _neighboring_hexes(self, x, y):
+        result = []
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if i+j != 0 and self._in_bounds_global(x+i, y+j):
+                    result.append((x+i, y+j))
+        return result
 
     def _init_hexes(self, n, op):
         hexes = []
@@ -54,42 +140,7 @@ class Field():
                 hexes[x].append(hex)
         return hexes
     
-
-    def _in_bounds(self, x, y):
-        return 0 < x <= self.size and 0 < y <= self.size
-    
-
-    def _in_bounds_global(self, x, y):
-        return 0 <= x < self.size+2 and 0 <= y < self.size+2
-
-
-    def _team_neighboring_hexes(self, x, y):
-        result = []
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                if i+j != 0 and self._in_bounds_global(x+i, y+j):
-                    if self.hexes[x+i][y+j].owner == self.hexes[x][y].owner:
-                        result.append((x+i, y+j))
-        return result
-    
-
     def draw(self, screen):
         for hex_row in self.hexes:
             for hex in hex_row:
                 hex.draw(screen)
-
-'''
-a = Field(5)
-for i in range(7):
-    print(a._hexes[i])
-print(a.is_team_win(t.Team.AI))
-print(a.is_team_win(t.Team.player))
-for i in range(5):
-    a.try_move(t.Team.player, i+1, 1)
-print(a.is_team_win(t.Team.AI))
-print(a.is_team_win(t.Team.player))
-for i in range(5):
-    a.try_move(t.Team.AI, i+1, 1)
-print(a.is_team_win(t.Team.AI))
-print(a.is_team_win(t.Team.player))
-'''

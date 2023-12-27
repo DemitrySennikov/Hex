@@ -62,8 +62,7 @@ def _game(field, player_name, op, op_name, current_team, screen):
     is_menu = False
 
     while not game_over:
-        hex, game_over, is_menu, is_quit = move(current_team, field.hexes,
-                                                home)
+        hex, game_over, is_menu, is_quit = move(current_team, field, home)
         if hex is None:
             continue
         if field.try_move(current_team, hex.x, hex.y):
@@ -96,6 +95,7 @@ def _game(field, player_name, op, op_name, current_team, screen):
                     pg.draw.polygon(screen, BLUE, 
                                     [(0, 0), (0, HEIGHT),
                                      (WIDTH, HEIGHT), (WIDTH, 0)], 25)
+            pg.display.update()        
         pg.display.update()
     
     if is_menu:

@@ -1,14 +1,14 @@
 {
     "Player1": {
         "Games": {
-            "Played": 1,
-            "Won": 1
+            "Played": 7,
+            "Won": 7
         },
-        "WPPL": 1.5454545454545454
+        "WPPL": 10.09090909090909
     },
     "Random": {
         "Games": {
-            "Played": 2,
+            "Played": 4,
             "Won": 0
         },
         "WPPL": 0
@@ -30,6 +30,13 @@
     "Lena": {
         "Games": {
             "Played": 2,
+            "Won": 0
+        },
+        "WPPL": 0
+    },
+    "AI": {
+        "Games": {
+            "Played": 4,
             "Won": 0
         },
         "WPPL": 0

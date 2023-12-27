@@ -1,25 +1,26 @@
 import random
 import pygame as pg
 from team import Team as T
+from field import Field
 
 
-def move(team, hexes, home):
+def move(team, field, home):
     if team.value == T.player.value:
-        return _player_move(hexes, home)
+        return _player_move(field.hexes, home)
     else:
-        return _opponent_move(team, hexes, home)
+        return _opponent_move(team, field, home)
 
 
-def _opponent_move(team, hexes, home):
+def _opponent_move(team, field, home):
     game_over = False
     is_menu = False
     is_quit = False
     if team.value == T.random.value:
-        hex = _random_move(hexes)
+        hex = _random_move(field.hexes)
     elif team.value == T.other_player.value:
-        hex, game_over, is_menu, is_quit = _player_move(hexes, home)
+        hex, game_over, is_menu, is_quit = _player_move(field.hexes, home)
     else:
-        hex = _random_move(hexes)
+        hex = _AI_move(field)
     return hex, game_over, is_menu, is_quit
     
     
@@ -70,9 +71,16 @@ def _random_move(hexes):
                 free_hexes.append(hex)
     return random.choice(free_hexes)
 
-'''
-a = field.Field(5)
-for _ in range(5):
-    x, y = _AI_random_move(a)
-    print(x, y)
-'''
+
+def _AI_move(field: Field):
+    hexes, is_attack, d = field.AI_solver()
+    if is_attack and d <=4 or not is_attack and d <= 5:
+        return random.choice(hexes)
+    count = 0
+    for hex_row in field.hexes:
+        for hex in hex_row:
+            if hex.owner == T.AI:
+                count += 1
+    if count%2 == 0:
+        return random.choice(hexes)
+    return _random_move(field.hexes)
